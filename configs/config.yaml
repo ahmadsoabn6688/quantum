@@ -1,0 +1,73 @@
+project:
+  name: quantum-chemistry-kernel
+  task: bace_classification
+  seed: 0
+
+data:
+  dataset_name: BACE
+  raw_path: data/raw/bace.csv
+  processed_dir: data/processed
+  smiles_column: smiles
+  label_column: label
+  test_size: 0.15
+
+features:
+  fingerprint:
+    type: ECFP4
+    radius: 2
+    n_bits: 1024
+  descriptors:
+    - molecular_weight
+    - logp
+    - h_bond_donors
+    - h_bond_acceptors
+    - tpsa
+    - rotatable_bonds
+    - heavy_atom_count
+    - ring_count
+  total_feature_dim: 1032
+
+compression:
+  method: PCA
+  dimensions:
+    - 4
+    - 6
+  main_dimension: 4
+
+experiment:
+  train_subset: 300
+  test_subset: 100
+  pca_dim: 4
+
+classical_baselines:
+  - RBF-SVM
+  - RandomForest
+  - XGBoost
+
+quantum_models:
+  full_qsvm:
+    model: QSVM-fixed
+    qubits: 4
+    depth: 1
+    kernel: fixed_ZZ_style
+  anchor_qsvm:
+    model: QAnchor-SVM-fixed
+    qubits: 4
+    depth: 1
+    anchors:
+      - 64
+      - 128
+
+evaluation:
+  metrics:
+    - accuracy
+    - f1
+    - auroc
+    - auprc
+    - ece
+    - runtime_sec
+
+outputs:
+  combined_results: results/tables/bace_combined_subset_results.csv
+  auroc_runtime_figure: results/figures/bace_auroc_vs_runtime.png
+  ece_runtime_figure: results/figures/bace_ece_vs_runtime.png
