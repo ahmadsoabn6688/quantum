@@ -1,0 +1,2 @@
+model,pca_dim,n_train,n_test,n_anchors,accuracy,f1,auroc,auprc,ece,kernel_time_sec,svm_train_time_sec,total_runtime_sec
+QAnchor-SVM-fixed,4,300,100,64,0.66,0.6136363636363636,0.6896828582898434,0.6783085113416263,0.07145250860027688,93.20308089256287,0.011002779006958008,93.21408367156982
